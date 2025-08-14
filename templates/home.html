@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container text-center">
+        <h1 class="hero-title">Book Your Tickets For Movies</h1>
+        <p class="hero-subtitle lead mx-auto">
+            Experience the magic of cinema. Find the latest movies, check showtimes, and book your seats instantly.
+        </p>
+        <button class="btn btn-primary btn-lg mt-3">Book Ticket</button>
+    </div>
+</section>
+
+<!-- Movies Section -->
+<section class="py-5 movies-section">
+    <div class="container">
+        <h2 class="section-title mb-4">Now Showing</h2>
+        <div id="movie-carousel" class="row row-cols-2 row-cols-md-3 row-cols-lg-5 g-4">
+            <!-- Movie cards will be injected here by JavaScript -->
+        </div>
+        <div class="text-center mt-4">
+             <button class="btn btn-outline-primary">Select Movie</button>
+        </div>
+    </div>
+</section>
+{% endblock %}

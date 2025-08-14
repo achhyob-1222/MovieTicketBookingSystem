@@ -1,0 +1,119 @@
+body {
+    background-color: #0B0F29;
+    color: #1e6fff;
+    font-family: 'Manrope', sans-serif;
+}
+
+.main-container {
+    background: url('https://i.imgur.com/Y3bVj1I.png') no-repeat center top;
+    background-size: 100% auto;
+}
+
+.navbar {
+    padding: 1.5rem 0;
+}
+
+.navbar-brand {
+    font-weight: 800;
+    font-size: 1.75rem;
+}
+
+.nav-link {
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 500;
+    margin: 0 1rem;
+    transition: color 0.3s;
+}
+.nav-link.active, .nav-link:hover {
+    color: #fff;
+}
+
+.btn-join {
+    background: linear-gradient(90deg, #3183FF, #53A2FF);
+    border: none;
+    color: #fff;
+    font-weight: 700;
+    border-radius: 8px;
+    padding: 10px 25px;
+    transition: all 0.3s ease;
+}
+.btn-join:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(49, 131, 255, 0.4);
+}
+
+.hero-section {
+    padding: 8rem 0;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+}
+
+.hero-subtitle {
+    max-width: 600px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.btn-primary {
+    background: linear-gradient(90deg, #3183FF, #53A2FF);
+    border: none;
+    border-radius: 8px;
+    padding: 12px 30px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+.btn-primary:hover {
+    background-color: #1a73ff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(49, 131, 255, 0.4);
+}
+
+.section-title {
+    font-weight: 700;
+}
+
+.movie-card {
+    border: 1px solid #232957;
+    background-color: transparent;
+    border-radius: 1rem;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+.movie-card:hover {
+    transform: translateY(-10px);
+    border-color: #3183FF;
+    box-shadow: 0 10px 30px rgba(49, 131, 255, 0.2);
+}
+
+/* --- New Modal Styles --- */
+.auth-modal {
+    background-color: #141832;
+    border: 1px solid #232957;
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+.auth-modal-aside {
+    background: linear-gradient(135deg, #0B0F29, #141832);
+    padding: 2rem;
+}
+
+.form-control {
+    background-color: #0B0F29;
+    border: 1px solid #232957;
+    color: #fff;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+}
+.form-control:focus {
+    background-color: #0B0F29;
+    border-color: #3183FF;
+    color: #fff;
+    box-shadow: 0 0 0 0.25rem rgba(49, 131, 255, 0.25);
+}
+
+.text-primary {
+    color: #3183FF !important;
+}

@@ -1,0 +1,67 @@
+{% load static %}
+<div class="modal fade" id="authModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content auth-modal">
+        <div class="modal-body p-0">
+            <div class="row g-0">
+                <!-- Left Side / Illustration -->
+                <div class="col-lg-6 d-none d-lg-flex flex-column justify-content-center align-items-center auth-modal-aside">
+                    <img src="{% static 'images/movie.jpg' %}" alt="Illustration" class="img-fluid mb-4" style="max-width: 250px;">
+                    <h2 class="text-white text-center mb-3">Welcome to CineWave</h2>
+                    <p class="text-white-50 text-center px-4">Your one-stop destination for movie tickets and showtimes.</p>
+                </div>
+                <!-- Right Side / Form -->
+                <div class="col-lg-6 d-flex flex-column p-4 p-md-5">
+                    <button type="button" class="btn-close btn-close-white align-self-end" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                    <div class="auth-form-container">
+                        <!-- Login Form (Visible by default) -->
+                        <div id="login-form-container">
+                            <h3 class="mb-4">Log In</h3>
+                            <form id="login-form">
+                              <div class="mb-3">
+                                <label for="login-username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="login-username" required>
+                              </div>
+                              <div class="mb-3">
+                                <label for="login-password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="login-password" required>
+                              </div>
+                              <p id="login-error" class="text-danger"></p>
+                              <button type="submit" class="btn btn-primary w-100 mt-3">Log In</button>
+                              <p class="text-center text-white-50 mt-3 mb-0">
+                                New to CineWave? <a href="#" id="show-signup" class="text-primary fw-bold">Sign Up Free</a>
+                              </p>
+                            </form>
+                        </div>
+
+                        <!-- Signup Form (Hidden by default) -->
+                        <div id="signup-form-container" class="d-none">
+                            <h3 class="mb-4">Sign Up</h3>
+                            <form id="signup-form">
+                              <div class="mb-3">
+                                <label for="signup-username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="signup-username" required>
+                              </div>
+                              <div class="mb-3">
+                                <label for="signup-email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="signup-email" required>
+                              </div>
+                              <div class="mb-3">
+                                <label for="signup-password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="signup-password" required>
+                              </div>
+                              <p id="signup-message" class="text-danger"></p>
+                              <button type="submit" class="btn btn-primary w-100 mt-3">Create Account</button>
+                               <p class="text-center text-white-50 mt-3 mb-0">
+                                Already have an account? <a href="#" id="show-login" class="text-primary fw-bold">Log In</a>
+                              </p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
