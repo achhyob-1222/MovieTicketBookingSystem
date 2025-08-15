@@ -1,6 +1,16 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment
 .venv
 .env
-db.sqlite3
-__pycache__/
+
+# Django
 migrations/
-.idea
+*.sqlite3
+db.sqlite3
+
+# IDE
+.idea/
