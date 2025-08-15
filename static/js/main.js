@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const movieGrid = document.getElementById('movie-carousel');
+    // THE ID HAS BEEN CORRECTED HERE
+    const movieGrid = document.getElementById('movie-grid');
     const authContainer = document.getElementById('auth-container');
     const authModal = new bootstrap.Modal(document.getElementById('authModal'));
 
@@ -33,10 +34,8 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         } else {
             authContainer.innerHTML = `
-             
                 <button class="btn btn-join ms-2" id="join-now-btn">Join Now</button>
             `;
-
             document.getElementById('join-now-btn').addEventListener('click', (e) => {
                 e.preventDefault();
                 showSignupForm();
@@ -66,23 +65,47 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(movies => {
                 movieGrid.innerHTML = '';
                 movies.forEach(movie => {
+                    const imageUrl = movie.poster_image
+                        ? `${window.location.origin}${movie.poster_image}`
+                        : 'https://placehold.co/400x600?text=No+Image';
                     const movieCard = `
                         <div class="col">
                             <div class="card movie-card h-100">
-                                <img src="${movie.poster_image || 'https://placehold.co/400x600?text=No+Image'}" class="card-img-top" alt="${movie.title}">
+                                <img src="${imageUrl}" class="card-img-top" alt="${movie.title}">
                                 <div class="card-body movie-card-body">
-                                    <h5 class="card-title movie-card-title">${movie.title}</h5>
+                                    <h5 class="card-title">${movie.title}</h5>
+                                    <button class="btn btn-book w-100 mt-3 book-now-btn" data-movie-id="${movie.id}">Book Now</button>
                                 </div>
                             </div>
                         </div>
                     `;
                     movieGrid.innerHTML += movieCard;
                 });
+                addBookingButtonListeners();
             })
             .catch(error => console.error('Error fetching movies:', error));
     }
 
-    // --- 4. HANDLE LOGIN & SIGNUP SUBMISSIONS ---
+    // --- 4. HANDLE BOOKING CLICKS ---
+    function addBookingButtonListeners() {
+        document.querySelectorAll('.book-now-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const movieId = this.dataset.movieId;
+                const accessToken = localStorage.getItem('accessToken');
+
+                if (accessToken) {
+                    // If logged in, redirect to a booking page (we'll build this later)
+                    window.location.href = `/booking/${movieId}/`;
+                } else {
+                    // If not logged in, show the signup/login modal
+                    showSignupForm(); // Show signup form first for new users
+                    authModal.show();
+                }
+            });
+        });
+    }
+
+    // --- 5. HANDLE LOGIN & SIGNUP SUBMISSIONS ---
     if (loginForm) {
         loginForm.addEventListener('submit', function(e) {
             e.preventDefault();
