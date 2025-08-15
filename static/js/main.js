@@ -65,9 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(movies => {
                 movieGrid.innerHTML = '';
                 movies.forEach(movie => {
-                    const imageUrl = movie.poster_image
-                        ? `${window.location.origin}${movie.poster_image}`
-                        : 'https://placehold.co/400x600?text=No+Image';
+                 const imageUrl = movie.poster_image || 'https://placehold.co/400x600?text=No+Image';
                     const movieCard = `
                         <div class="col">
                             <div class="card movie-card h-100">
