@@ -1,11 +1,12 @@
+{% load static %}
 body {
-    background-color: #0B0F29;
+    background-color: #111120;
     color: #1e6fff;
     font-family: 'Manrope', sans-serif;
 }
 
 .main-container {
-    background: url('https://i.imgur.com/Y3bVj1I.png') no-repeat center top;
+    background: url("{% static 'images/cinema.jpg' %}") no-repeat center top;
     background-size: 100% auto;
 }
 

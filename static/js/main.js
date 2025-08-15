@@ -33,14 +33,10 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         } else {
             authContainer.innerHTML = `
-                <a href="#" class="nav-link" id="login-link">Login</a>
+             
                 <button class="btn btn-join ms-2" id="join-now-btn">Join Now</button>
             `;
-            document.getElementById('login-link').addEventListener('click', (e) => {
-                e.preventDefault();
-                showLoginForm();
-                authModal.show();
-            });
+
             document.getElementById('join-now-btn').addEventListener('click', (e) => {
                 e.preventDefault();
                 showSignupForm();
