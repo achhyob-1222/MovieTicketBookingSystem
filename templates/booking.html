@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div id="booking-page-container">
+    <!-- Movie details and booking UI will be loaded here by JavaScript -->
+    <div class="container text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block page_scripts %}
+      <script src="{% static 'js/booking.js' %}"></script>
+
+{% endblock %}
