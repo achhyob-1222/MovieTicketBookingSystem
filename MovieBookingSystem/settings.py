@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     #apps
     'users',
     'movies',
+    'booking.apps.BookingConfig',
 ]
 
 MIDDLEWARE = [
