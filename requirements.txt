@@ -1,0 +1,10 @@
+Django Core
+Django
+djangorestframework
+djangorestframework-simplejwt
+
+Image Handling
+Pillow
+
+Environment Variables (for settings.py)
+python-dotenv

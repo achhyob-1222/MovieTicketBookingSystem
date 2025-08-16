@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     // THE ID HAS BEEN CORRECTED HERE
-    const movieGrid = document.getElementById('movie-grid');
+    const nowShowingGrid = document.getElementById('now-showing-grid');
+    const comingSoonGrid = document.getElementById('coming-soon-grid');
     const authContainer = document.getElementById('auth-container');
     const authModal = new bootstrap.Modal(document.getElementById('authModal'));
 
@@ -22,8 +23,10 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateAuthState() {
         const accessToken = localStorage.getItem('accessToken');
         const username = localStorage.getItem('username');
+        const myTicketsLink = document.getElementById('my-tickets-link');
 
         if (accessToken && username) {
+            myTicketsLink.classList.remove('d-none');
             authContainer.innerHTML = `
                 <span class="navbar-text me-3">Welcome, ${username}</span>
                 <button id="logout-btn" class="btn btn-outline-light btn-sm">Logout</button>
@@ -33,6 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 updateAuthState();
             });
         } else {
+            myTicketsLink.classList.add('d-none');
             authContainer.innerHTML = `
                 <button class="btn btn-join ms-2" id="join-now-btn">Join Now</button>
             `;
@@ -58,47 +62,73 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     // --- 3. FETCH MOVIES ---
-    function fetchMovies() {
-        if (!movieGrid) return;
-        fetch('/api/movies/')
-            .then(response => response.json())
+ function fetchMovies(endpoint, gridElement, movieType) {
+        if (!gridElement) return;
+
+        fetch(`/api/movies/${endpoint}/`)
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                return response.json();
+            })
             .then(movies => {
-                movieGrid.innerHTML = '';
+                gridElement.innerHTML = ''; // Clear any loading text
                 movies.forEach(movie => {
-                 const imageUrl = movie.poster_image || 'https://placehold.co/400x600?text=No+Image';
+                    const imageUrl = movie.poster_image ? movie.poster_image : 'https://placehold.co/400x600?text=No+Image';
+
+                    let buttonsHtml = '';
+                    if (movieType === 'now-showing') {
+                        buttonsHtml = `
+                            <button class="btn btn-book w-100 book-now-btn" data-movie-id="${movie.id}">Book Now</button>
+                        `;
+                    } else { // 'coming-soon'
+                        buttonsHtml = `
+                            <button class="btn btn-sm btn-outline-light w-100 more-info-btn" data-movie-id="${movie.id}">More Info</button>
+                        `;
+                    }
+
                     const movieCard = `
                         <div class="col">
                             <div class="card movie-card h-100">
                                 <img src="${imageUrl}" class="card-img-top" alt="${movie.title}">
                                 <div class="card-body movie-card-body">
                                     <h5 class="card-title">${movie.title}</h5>
-                                    <button class="btn btn-book w-100 mt-3 book-now-btn" data-movie-id="${movie.id}">Book Now</button>
+                                    <div class="mt-3">
+                                        ${buttonsHtml}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     `;
-                    movieGrid.innerHTML += movieCard;
+                    gridElement.innerHTML += movieCard;
                 });
-                addBookingButtonListeners();
+                addCardButtonListeners();
             })
-            .catch(error => console.error('Error fetching movies:', error));
+            .catch(error => {
+                console.error(`Error fetching ${endpoint} movies:`, error);
+                gridElement.innerHTML = `<p class="text-danger">Could not load movies.</p>`;
+            });
     }
 
-    // --- 4. HANDLE BOOKING CLICKS ---
-    function addBookingButtonListeners() {
+    // --- 4. HANDLE CARD BUTTON CLICKS ---
+    function addCardButtonListeners() {
+        // Handle "Book Now" clicks
         document.querySelectorAll('.book-now-btn').forEach(button => {
             button.addEventListener('click', function() {
                 const movieId = this.dataset.movieId;
-                const accessToken = localStorage.getItem('accessToken');
-
-                if (accessToken) {
-                    // If logged in, redirect to a booking page (we'll build this later)
+                if (localStorage.getItem('accessToken')) {
                     window.location.href = `/booking/${movieId}/`;
                 } else {
-                    // If not logged in, show the signup/login modal
-                    showSignupForm(); // Show signup form first for new users
+                    showSignupForm();
                     authModal.show();
                 }
+            });
+        });
+
+        // Handle "More Info" clicks
+        document.querySelectorAll('.more-info-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const movieId = this.dataset.movieId;
+                window.location.href = `/movie/${movieId}/`;
             });
         });
     }
@@ -163,5 +193,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- INITIAL PAGE LOAD ---
     updateAuthState();
-    fetchMovies();
+    fetchMovies('now-showing', nowShowingGrid, 'now-showing');
+    fetchMovies('coming-soon', comingSoonGrid, 'coming-soon');
 });
+
+
+

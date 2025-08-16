@@ -1,10 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const container = document.getElementById('booking-page-container');
-
-    // This check prevents the script from running on the wrong page
-    if (!container) {
-        return;
-    }
+    if (!container) return; // Only run on the booking page
 
     const movieId = window.location.pathname.split('/')[2];
     const SEAT_PRICE = 350;
@@ -20,14 +16,15 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(movie => {
             renderBookingPage(movie);
-            fetchShowtimes(movie.id);
+            generateDateButtons();
         })
         .catch(error => {
             container.innerHTML = `<div class="container text-center py-5"><h2 class="text-danger">${error.message}</h2></div>`;
         });
 
     function renderBookingPage(movie) {
-        const heroImageUrl = movie.hero_image ? movie.hero_image : '';
+        const heroImageUrl = movie.hero_image || 'https://placehold.co/1920x1080/1c1c1c/ffffff?text=No+Banner';
+        
         container.innerHTML = `
             <section class="booking-hero" style="background-image: url('${heroImageUrl}')">
                 <div class="container position-relative">
@@ -39,15 +36,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="container">
                     <div class="row g-5">
                         <div class="col-lg-8">
-                            <h2 class="section-title mb-4">Select Showtime & Seats</h2>
-                            <div id="showtimes-container" class="mb-4"></div>
+                            <h2 class="section-title mb-4">1. Select Date</h2>
+                            <div id="date-selection-container" class="date-selector mb-4"></div>
+                            
+                            <div id="showtimes-section" class="d-none">
+                                <h2 class="section-title mb-4">2. Select Showtime</h2>
+                                <div id="showtimes-container" class="mb-4"></div>
+                            </div>
+
                             <div id="seat-map-container" class="d-none">
-                                <div class="screen-arc"></div>
-                                <div class="seat-map" id="seat-map"></div>
-                                <div class="seat-legend mt-4">
-                                    <div class="legend-item"><div class="legend-box" style="background: #4a4a4a;"></div> Available</div>
-                                    <div class="legend-item"><div class="legend-box" style="background: #3183FF;"></div> Selected</div>
-                                    <div class="legend-item"><div class="legend-box" style="background: #222;"></div> Reserved</div>
+                                <h2 class="section-title mb-4">3. Select Seats</h2>
+                                <div class="seat-map-container">
+                                    <div class="screen-arc"></div>
+                                    <div class="seat-map" id="seat-map"></div>
+                                    <div class="seat-legend mt-4">
+                                        <div class="legend-item"><div class="legend-box" style="background: #4a4a4a;"></div> Available</div>
+                                        <div class="legend-item"><div class="legend-box" style="background: #3183FF;"></div> Selected</div>
+                                        <div class="legend-item"><div class="legend-box" style="background: #222;"></div> Reserved</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -56,6 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <h3 class="section-title">Your Booking</h3>
                                 <hr class="border-secondary"/>
                                 <p><strong>Movie:</strong> ${movie.title}</p>
+                                <p><strong>Date:</strong> <span id="date-display">Select a date</span></p>
                                 <p><strong>Showtime:</strong> <span id="showtime-display">Select a time</span></p>
                                 <p><strong>Seats:</strong> <span id="selected-seats-display">None</span></p>
                                 <hr class="border-secondary"/>
@@ -70,18 +77,74 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
     }
 
-    function fetchShowtimes(movieId) {
-        fetch(`/api/bookings/movies/${movieId}/showtimes/`)
-            .then(res => res.json())
+    function generateDateButtons() {
+        const dateContainer = document.getElementById('date-selection-container');
+        let buttonsHtml = '';
+        const today = new Date();
+        const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+        for (let i = 0; i < 4; i++) {
+            const date = new Date(today);
+            date.setDate(today.getDate() + i);
+
+            const dayName = (i === 0) ? 'Today' : (i === 1) ? 'Tomorrow' : dayNames[date.getDay()];
+            const dateString = `${date.getDate()} ${date.toLocaleString('default', { month: 'short' })}`;
+            const isoDate = date.toISOString().split('T')[0]; // YYYY-MM-DD
+
+            buttonsHtml += `
+                <button class="btn btn-outline-light me-2 mb-2 date-btn" data-date="${isoDate}" data-date-text="${dayName}, ${dateString}">
+                    ${dayName}<br><small>${dateString}</small>
+                </button>
+            `;
+        }
+        dateContainer.innerHTML = buttonsHtml;
+        addDateButtonListeners();
+    }
+
+    function addDateButtonListeners() {
+        document.querySelectorAll('.date-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.date-btn.active').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const selectedDate = this.dataset.date;
+                document.getElementById('date-display').textContent = this.dataset.dateText;
+                document.getElementById('showtimes-section').classList.remove('d-none');
+                document.getElementById('seat-map-container').classList.add('d-none');
+                document.getElementById('showtime-display').textContent = 'Select a time';
+                fetchShowtimes(movieId, selectedDate);
+            });
+        });
+    }
+
+    function fetchShowtimes(movieId, date) {
+        const showtimesContainer = document.getElementById('showtimes-container');
+        showtimesContainer.innerHTML = '<div class="spinner-border text-primary spinner-border-sm"></div>';
+
+        fetch(`/api/bookings/movies/${movieId}/showtimes/?date=${date}`)
+            .then(res => {
+                if (!res.ok) throw new Error('Failed to fetch showtimes.');
+                return res.json();
+            })
             .then(showtimes => {
-                const showtimesContainer = document.getElementById('showtimes-container');
+                if (showtimes.length === 0) {
+                    showtimesContainer.innerHTML = '<p class="text-white-50">No showtimes available for this date.</p>';
+                    return;
+                }
                 let html = '<h4>Showtimes:</h4>';
                 showtimes.forEach(st => {
-                    const time = new Date(st.show_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    const timeString = st.time;
+                    const [hours, minutes] = timeString.split(':');
+                    const time = new Date(0, 0, 0, hours, minutes).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+
                     html += `<button class="btn btn-outline-light me-2 mb-2 showtime-btn" data-showtime-id="${st.id}" data-showtime-text="${time}">${time}</button>`;
                 });
                 showtimesContainer.innerHTML = html;
                 addShowtimeListeners();
+            })
+            .catch(error => {
+                console.error('Error fetching showtimes:', error);
+                showtimesContainer.innerHTML = `<p class="text-danger">${error.message}</p>`;
             });
     }
 

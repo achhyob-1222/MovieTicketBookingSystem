@@ -34,7 +34,7 @@ body {
 
 .hero-section {
     padding-top: 12rem;
-    padding-bottom: 20%;
+    padding-bottom: 10%;
     background-color: #000;
     position: relative;
     overflow: hidden;
@@ -96,6 +96,9 @@ body {
 .section-title {
     font-weight: 700;
     color: #3183FF;
+}
+.card-title{
+    color: aliceblue;
 }
 
 .movie-card {
@@ -173,4 +176,97 @@ body {
 
 .text-primary {
     color: #3183FF !important;
+}
+
+
+/* Booking Page Styles */
+.booking-hero {
+    height: 60vh;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    color: #fff;
+    background-size: cover;
+    background-position: center;
+}
+.booking-hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(to top, rgba(0,0,0,1) 10%, rgba(0,0,0,0.2) 100%);
+}
+.booking-movie-title {
+    font-size: 3rem;
+    font-weight: 800;
+}
+
+.seat-map-container {
+    padding: 2rem;
+    background-color: #080808;
+    border-radius: 1rem;
+    border: 1px solid #222;
+}
+
+.screen-arc {
+    height: 30px;
+    border-bottom: 3px solid #3183FF;
+    border-radius: 50%;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 20px -10px #3183FF;
+}
+
+.seat-map {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr); /* 10 seats per row */
+    gap: 0.75rem;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.seat {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    background-color: #4a4a4a;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231a1a1a'%3E%3Cpath d='M4 18v3h3v-3h10v3h3v-6H4v3zm15-8h3v3h-3v-3zM2 10h3v3H2v-3zm15 3H7V5c0-1.1.9-2 2-2h6c1.1 0 2 .9 2 2v8z'/%3E%3C/svg%3E");
+    background-size: 70%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.seat.selected {
+    background-color: #3183FF;
+    transform: scale(1.1);
+}
+.seat.booked {
+    background-color: #222;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.seat-legend {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.legend-box {
+    width: 15px;
+    height: 15px;
+    border-radius: 2px;
+}
+.date-selector .btn {
+    min-width: 120px;
+}
+
+.bg-darker {
+    background-color: #080808;
+    border: 1px solid #222;
 }
