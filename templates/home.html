@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
     {% include 'partial/hero_section.html' %}
     {% include 'partial/movie_section.html' %}
+{% endblock %}
+
+{% block page_scripts %}
+    <script src="{% static 'js/main.js' %}"></script>
 {% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="py-5" style="margin-top: 80px;">
+    <div class="container">
+        <h1 class="hero-title mb-4">Your Tickets</h1>
+        <div id="tickets-list" class="row g-4">
+            <!-- User's tickets will be loaded here by JavaScript -->
+            <div class="col-12 text-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block page_scripts %}
+    <script src="{% static 'js/tickets.js' %}"></script>
+{% endblock %}

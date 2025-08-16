@@ -1,44 +1,22 @@
-from django.db.models.signals import post_save
+from django.db.models.signals import post_migrate
 from django.dispatch import receiver
-from movies.models import Movie
-from .models import CinemaHall, Showtime, Seat
-from datetime import datetime, time
+from .models import CinemaHall, Seat
 
 
-@receiver(post_save, sender=Movie)
-def create_daily_showtimes(sender, instance, created, **kwargs):
-    # This function runs every time a new movie is created
-    if created:
-        # Get or create our two cinema halls
-        hall1, _ = CinemaHall.objects.get_or_create(name='Hall 1', defaults={'total_seats': 50})
-        hall2, _ = CinemaHall.objects.get_or_create(name='Hall 2', defaults={'total_seats': 50})
+@receiver(post_migrate)
+def setup_halls_and_seats(sender, **kwargs):
+    # This signal now only runs once to set up the initial halls and seats.
+    if sender.name == 'booking' and CinemaHall.objects.count() == 0:
+        print("No cinema halls found. Creating initial halls and seats...")
 
-        # Automatically create seats for the halls if they don't have any
-        if not hall1.seats.exists():
-            for row in ['A', 'B', 'C', 'D', 'E']:
-                for num in range(1, 11):
-                    Seat.objects.create(hall=hall1, seat_row=row, seat_number=num)
+        hall_a = CinemaHall.objects.create(name='Hall A', total_seats=50)
+        for row in ['A', 'B', 'C', 'D', 'E']:
+            for num in range(1, 11):
+                Seat.objects.create(hall=hall_a, seat_row=row, seat_number=num)
 
-        if not hall2.seats.exists():
-            for row in ['A', 'B', 'C', 'D', 'E']:
-                for num in range(1, 11):
-                    Seat.objects.create(hall=hall2, seat_row=row, seat_number=num)
+        hall_b = CinemaHall.objects.create(name='Hall B', total_seats=50)
+        for row in ['A', 'B', 'C', 'D', 'E']:
+            for num in range(1, 11):
+                Seat.objects.create(hall=hall_b, seat_row=row, seat_number=num)
 
-        # Define the showtimes for today
-        today = datetime.now().date()
-        show_times_hall1 = [time(8, 0), time(16, 0)]  # 8:00 AM and 4:00 PM
-        show_times_hall2 = [time(11, 0), time(18, 0)]  # 11:00 AM and 6:00 PM
-
-        for show_time in show_times_hall1:
-            Showtime.objects.create(
-                movie=instance,
-                hall=hall1,
-                show_time=datetime.combine(today, show_time)
-            )
-
-        for show_time in show_times_hall2:
-            Showtime.objects.create(
-                movie=instance,
-                hall=hall2,
-                show_time=datetime.combine(today, show_time)
-            )
+        print("Initial halls and seats created successfully.")
