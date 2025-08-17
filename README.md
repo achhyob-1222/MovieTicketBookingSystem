@@ -34,7 +34,7 @@ Python 3.8 or higher
 pip (Python package installer)
 
 2. Clone the Repository
-git clone <your-repository-url>
+git clone <your-repository-url> || https://github.com/achhyob-1222/MovieTicketBookingSystem.git
 cd <your-project-directory>
 
 

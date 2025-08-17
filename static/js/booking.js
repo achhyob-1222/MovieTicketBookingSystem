@@ -1,5 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
     const container = document.getElementById('booking-page-container');
+     const accessToken = localStorage.getItem('accessToken');
+
+    if (!accessToken) {
+        window.location.href = '/'; // Redirect if not logged in
+        return;
+    }
     if (!container) return; // Only run on the booking page
 
     const movieId = window.location.pathname.split('/')[2];
@@ -24,6 +30,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function renderBookingPage(movie) {
         const heroImageUrl = movie.hero_image || 'https://placehold.co/1920x1080/1c1c1c/ffffff?text=No+Banner';
+        let trailerEmbedUrl = '';
+        if (movie.trailer_urls) {
+            try {
+                const url = new URL(movie.trailer_urls);
+                const videoId = url.searchParams.get('v');
+                if (videoId) {
+                    trailerEmbedUrl = `https://www.youtube.com/embed/${videoId}`;
+                }
+            } catch (e) {
+                console.error('Invalid trailer URL:', movie.trailer_urls);
+            }
+        }
+
         
         container.innerHTML = `
             <section class="booking-hero" style="background-image: url('${heroImageUrl}')">
@@ -36,6 +55,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="container">
                     <div class="row g-5">
                         <div class="col-lg-8">
+                            <p class="text-white-50">${movie.description || 'No description available.'}</p>
+                            
+                            ${trailerEmbedUrl ? `
+                                <h2 class="section-title mt-5 mb-3">Trailer</h2>
+                                <div class="ratio ratio-16x9">
+                                    <iframe src="${trailerEmbedUrl}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                </div>
+                            ` : '<p class="text-white-50 mt-5">No trailer available for this movie.</p>'}
                             <h2 class="section-title mb-4">1. Select Date</h2>
                             <div id="date-selection-container" class="date-selector mb-4"></div>
                             
