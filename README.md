@@ -38,7 +38,7 @@ git clone <your-repository-url> || https://github.com/achhyob-1222/MovieTicketBo
 cd <your-project-directory>
 
 
-3. Set Up a Virtual Environment and add Django Secret key
+3. Set Up a Virtual Environment 
 It's highly recommended to use a virtual environment to manage project dependencies.
 
 Create the environment:
@@ -57,6 +57,14 @@ On macOS/Linux:
 
 source .venv/bin/activate
 
+
+4. Install Dependencies and add Django Secret key
+
+
+Install all the required Python packages using the requirements.txt file.
+
+pip install -r requirements.txt
+
 In terminal paste the given code and generate the key:
 
 code
@@ -65,13 +73,6 @@ python -c 'from django.core.management.utils import get_random_secret_key; print
 Make a .env file and 
 
 DJANGO_SECRET_KEY ="Paste the key here"
-
-
-
-4. Install Dependencies
-Install all the required Python packages using the requirements.txt file.
-
-pip install -r requirements.txt
 
 
 5. Set Up the Database
