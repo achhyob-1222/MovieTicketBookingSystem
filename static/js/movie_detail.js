@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
             renderMovieDetail(movie);
         })
         .catch(error => {
-            container.innerHTML = `<div class="container text-center py-5"><h2 class="text-danger">${error.message}</h2></div>`;
+            container.innerHTML = `<div class="container text-center py-5"><h2 class="text-danger">No movie founded/added.</h2></div>`;
         });
 
     function renderMovieDetail(movie) {

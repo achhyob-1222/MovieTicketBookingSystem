@@ -38,7 +38,7 @@ git clone <your-repository-url> || https://github.com/achhyob-1222/MovieTicketBo
 cd <your-project-directory>
 
 
-3. Set Up a Virtual Environment
+3. Set Up a Virtual Environment and add Django Secret key
 It's highly recommended to use a virtual environment to manage project dependencies.
 
 Create the environment:
@@ -56,6 +56,16 @@ On Windows:
 On macOS/Linux:
 
 source .venv/bin/activate
+
+In terminal paste the given code and generate the key:
+
+code
+python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
+
+Make a .env file and 
+
+DJANGO_SECRET_KEY ="Paste the key here"
+
 
 
 4. Install Dependencies
@@ -90,7 +100,7 @@ Start the server using the command above.
 
 Access the Admin Panel: Navigate to http://127.0.0.1:8000/admin/ and log in with your superuser account.
 
-Create Cinema Halls: Before adding movies, go to the "Cinema halls" section and create your halls (e.g., "Hall A", "Hall B"). The seats will be created automatically by a signal.
+Create Cinema Halls: The two halls A and B will be created automatically with 50 seats automatically through a signal
 
 Add Movies: Go to the "Movies" section and add new movies. Fill in all the details, including release dates and image URLs.
 

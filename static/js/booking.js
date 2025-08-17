@@ -57,12 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div class="col-lg-8">
                             <p class="text-white-50">${movie.description || 'No description available.'}</p>
                             
-                            ${trailerEmbedUrl ? `
-                                <h2 class="section-title mt-5 mb-3">Trailer</h2>
-                                <div class="ratio ratio-16x9">
-                                    <iframe src="${trailerEmbedUrl}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                                </div>
-                            ` : '<p class="text-white-50 mt-5">No trailer available for this movie.</p>'}
+   
                             <h2 class="section-title mb-4">1. Select Date</h2>
                             <div id="date-selection-container" class="date-selector mb-4"></div>
                             
@@ -83,6 +78,13 @@ document.addEventListener('DOMContentLoaded', function() {
                                     </div>
                                 </div>
                             </div>
+                            
+                                        ${trailerEmbedUrl ? `
+                                    <h2 class="section-title mt-5 mb-3">Trailer</h2>
+                                    <div class="ratio ratio-16x9">
+                                    <iframe src="${trailerEmbedUrl}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                </div>
+                            ` : '<p class="text-white-50 mt-5">No trailer available for this movie.</p>'}
                         </div>
                         <div class="col-lg-4">
                             <div class="p-4 bg-darker rounded">
